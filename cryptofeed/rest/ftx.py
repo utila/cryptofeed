@@ -12,6 +12,7 @@ from sortedcontainers.sorteddict import SortedDict as sd
 
 from cryptofeed.rest.api import API, request_retry
 from cryptofeed.defines import FTX, SELL, BUY, BID, ASK
+from cryptofeed.standards import pair_exchange_to_std, timestamp_normalize
 
 REQUEST_LIMIT = 100
 RATE_LIMIT_SLEEP = 0.2
