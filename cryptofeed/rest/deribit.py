@@ -8,11 +8,9 @@ from cryptofeed.defines import DERIBIT, SELL, BUY, BID, ASK
 from cryptofeed.standards import pair_std_to_exchange, timestamp_normalize
 from sortedcontainers import SortedDict as sd
 
-
 REQUEST_LIMIT = 1000
 RATE_LIMIT_SLEEP = 0.2
 LOG = logging.getLogger('rest')
-
 
 class Deribit(API):
     ID = DERIBIT

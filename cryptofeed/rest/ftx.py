@@ -1,16 +1,12 @@
 from time import sleep
 import requests
-import urllib
-import base64
 import logging
-from decimal import Decimal
-
 import pandas as pd
-from sortedcontainers.sorteddict import SortedDict as sd
 
 from cryptofeed.rest.api import API, request_retry
 from cryptofeed.defines import FTX, SELL, BUY, BID, ASK
-from cryptofeed.standards import  pair_std_to_exchange, pair_exchange_to_std, timestamp_normalize
+from cryptofeed.standards import pair_std_to_exchange, pair_exchange_to_std, timestamp_normalize
+from sortedcontainers import SortedDict as sd
 
 REQUEST_LIMIT = 100
 RATE_LIMIT_SLEEP = 0.2
@@ -32,11 +28,11 @@ class FTX(API):
         if start_date:
             if not end_date:
                 end_date = pd.Timestamp.utcnow()
-            start = API._timestamp(start_date)
-            end = API._timestamp(end_date) - pd.Timedelta(milliseconds=1)
+            start = API._timestamp(start_date) - pd.Timedelta(nanoseconds=1)
+            end = API._timestamp(end_date) - pd.Timedelta(nanoseconds=1)
 
-            start = int(start.timestamp()*1.0)
-            end = int(end.timestamp()*1.0)
+            start = int(start.timestamp() * 1.0)
+            end = int(end.timestamp() * 1.0)
 
         @request_retry(self.ID, retry, retry_wait)
         def helper(start, end):
