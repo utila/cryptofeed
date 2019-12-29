@@ -1,6 +1,4 @@
-import time
-import hashlib
-import hmac
+from time import sleep
 import requests
 import urllib
 import base64
