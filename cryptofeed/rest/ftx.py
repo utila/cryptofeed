@@ -28,7 +28,7 @@ class FTX(API):
 
         if not end_date:
             end_date = pd.Timestamp.utcnow()
-        start = pd.Timestamp(start_date)
+        start = API._timestamp(start_date)
         end = API._timestamp(end_date) - pd.Timedelta(nanoseconds=1)
 
         start = int(start.timestamp())
@@ -71,7 +71,7 @@ class FTX(API):
                         "%s: number of trades exceeds exchange time window, some data will not be retrieved for time %d", self.ID, start)
                     start += 1
                 else:
-                    start = data[-1]["time"]
+                    start = API._timestamp(data[-1]["time"])
 
             orig_data = data
             data = [self._trade_normalization(x, instrument) for x in data]
