@@ -37,8 +37,8 @@ class FTX(API):
             start = API._timestamp(start_date)
             end = API._timestamp(end_date) - pd.Timedelta(nanoseconds=1)
 
-            start = int(start.timestamp() * 1000)
-            end = int(end.timestamp() * 1000)
+            start = int(start.timestamp())
+            end = int(end.timestamp())
 
         @request_retry(self.ID, retry, retry_wait)
         def helper(start, end):
