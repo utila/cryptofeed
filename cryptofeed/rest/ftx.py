@@ -66,12 +66,12 @@ class FTX(API):
                 LOG.warning("%s: No data for range %d - %d",
                             self.ID, start, end)
             else:
-                if API._timestamp(data[-1]["time"])timestamp() == start.timestamp():
+                if API._timestamp(data[-1]["time"]).timestamp() == start.timestamp():
                     LOG.warning(
                         "%s: number of trades exceeds exchange time window, some data will not be retrieved for time %d", self.ID, start)
                     start += 1
                 else:
-                    start = pd.Timestamp(data[-1]["time"])
+                    start = API._timestamp(data[-1]["time"]).timestamp()
 
             orig_data = data
             data = [self._trade_normalization(x, instrument) for x in data]
