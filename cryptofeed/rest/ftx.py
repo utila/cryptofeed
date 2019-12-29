@@ -35,8 +35,8 @@ class FTX(API):
             start = API._timestamp(start_date)
             end = API._timestamp(end_date) - pd.Timedelta(nanoseconds=1)
 
-            start = int(start.timestamp())
-            end = int(end.timestamp())
+            start = int(start.timestamp() * 1)
+            end = int(end.timestamp() * 1)
 
         @request_retry(self.ID, retry, retry_wait)
         def helper(start, end):
@@ -52,7 +52,9 @@ class FTX(API):
             r = helper(start, end)
 
             if r.status_code == 429:
-                sleep(int(r.headers['Retry-After']))
+                LOG.warning("%s: 429 for URL %s - %s", self.ID, r.url, r.text)
+                sleep(RATE_LIMIT_SLEEP)
+                # sleep(int(r.headers['Retry-After']))
                 continue
             elif r.status_code == 500:
                 LOG.warning("%s: 500 for URL %s - %s", self.ID, r.url, r.text)
