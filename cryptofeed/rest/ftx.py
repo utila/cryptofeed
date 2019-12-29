@@ -26,14 +26,13 @@ class FTX(API):
         start = None
         end = None
 
-        if start_date:
-            if not end_date:
-                end_date = pd.Timestamp.utcnow()
-            start = API._timestamp(start_date)
-            end = API._timestamp(end_date) - pd.Timedelta(nanoseconds=1)
+        if not end_date:
+            end_date = pd.Timestamp.utcnow()
+        start = pd.timestamp(start_date).timestamp()
+        end = API._timestamp(end_date) - pd.Timedelta(nanoseconds=1)
 
-            start = float(start.timestamp() * 1.0)
-            end = float(end.timestamp() * 1.0)
+        start = int(start.timestamp())
+        end = int(end.timestamp())
 
         @request_retry(self.ID, retry, retry_wait)
         def helper(start, end):
