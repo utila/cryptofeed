@@ -1,4 +1,5 @@
 from time import sleep
+import datetime
 import requests
 import logging
 import pandas as pd
@@ -28,7 +29,7 @@ class FTX(API):
         if start_date:
             if not end_date:
                 end_date = pd.Timestamp.utcnow()
-            start = API._timestamp(start_date) - pd.Timedelta(nanoseconds=1)
+            start = API._timestamp(start_date)
             end = API._timestamp(end_date) - pd.Timedelta(nanoseconds=1)
 
             start = int(start.timestamp() * 1.0)
@@ -37,6 +38,7 @@ class FTX(API):
         @request_retry(self.ID, retry, retry_wait)
         def helper(start, end):
             if start and end:
+                start = timestamp_normalize(self.ID, start)
                 # /markets/{market_name}/trades?limit={limit}&start_time={start_time}&end_time={end_time}
                 return requests.get(f"{self.api}markets/{instrument}/trades?limit={REQUEST_LIMIT}&start_time={start}&end_time={end}")
                 # return requests.get(f"{self.api}get_last_trades_by_instrument_and_time?&start_timestamp={start}&end_timestamp={end}&instrument_name={instrument}&include_old=true&count={REQUEST_LIMIT}")
