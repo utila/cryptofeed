@@ -42,7 +42,7 @@ class FTX(API):
                 # return requests.get(f"{self.api}get_last_trades_by_instrument_and_time?&start_timestamp={start}&end_timestamp={end}&instrument_name={instrument}&include_old=true&count={REQUEST_LIMIT}")
             else:
                 # return requests.get(f"{self.api}get_last_trades_by_instrument_and_time/")
-                return None
+                return requests.get(f"{self.api}markets/{instrument}/trades?limit={REQUEST_LIMIT}")
 
         while True:
             r = helper(start, end)
@@ -66,12 +66,12 @@ class FTX(API):
                 LOG.warning("%s: No data for range %d - %d",
                             self.ID, start, end)
             else:
-                if API._timestamp(data[-1]["time"]) == start:
+                if API._timestamp(data[-1]["time"])timestamp() == start.timestamp():
                     LOG.warning(
                         "%s: number of trades exceeds exchange time window, some data will not be retrieved for time %d", self.ID, start)
                     start += 1
                 else:
-                    start = API._timestamp(data[-1]["time"]).timestamp()
+                    start = pd.Timestamp(data[-1]["time"])
 
             orig_data = data
             data = [self._trade_normalization(x, instrument) for x in data]
