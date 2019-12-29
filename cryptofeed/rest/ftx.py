@@ -1,4 +1,4 @@
-from time import sleep
+from time import time, sleep
 import datetime
 import requests
 import logging
@@ -28,7 +28,7 @@ class FTX(API):
 
         if not end_date:
             end_date = pd.Timestamp.utcnow()
-        start = pd.timestamp(start_date).timestamp()
+        start = pd.Timestamp(start_date).timestamp()
         end = API._timestamp(end_date) - pd.Timedelta(nanoseconds=1)
 
         start = int(start.timestamp())
